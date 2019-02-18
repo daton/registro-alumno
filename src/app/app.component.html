@@ -1,20 +1,221 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<clr-wizard #wizardlg [(clrWizardOpen)]="lgOpen" clrWizardSize="lg" [clrWizardClosable]="false">
 
+  <clr-wizard-title>Registro Alumno</clr-wizard-title>
+
+  <clr-wizard-button [type]="'cancel'" (click)="navegarInicio()">Cancelar</clr-wizard-button>
+  <clr-wizard-button [type]="'previous'">Atrás</clr-wizard-button>
+  <clr-wizard-button [type]="'next'" (click)="obtenerClave()">Siguiente</clr-wizard-button>
+  <clr-wizard-button [type]="'finish'" (click)="navegarInicioYregistrar()">Finalizar</clr-wizard-button>
+
+
+
+  <clr-wizard-page [clrWizardPageNextDisabled]="nombre.pristine || !myForm.valid" clrWizardPagePreventDefault="true" (clrWizardPageOnCommit)="onCommit()"
+      (clrWizardPageOnCancel)="doCancel()">
+      <ng-template clrPageTitle>Datos generales</ng-template>
+      <div class="spinner" *ngIf="loadingFlag">
+          Loading...
+      </div>
+      <clr-alert [clrAlertType]="'alert-info'" [clrAlertClosable]="false">
+          <div class="alert-item">
+              Es importante que tengas a la mano la clave de tu libro
+          </div>
+      </clr-alert>
+
+
+      <form #myForm="ngForm" [class.hide]="loadingFlag">
+          <section class="form-block">
+
+              <div class="form-group">
+                  <label>Nombre</label>
+                  <label for="nombreInput" aria-haspopup="true" role="tooltip" [class.invalid]="nombre.touched && !nombre.valid" class="tooltip tooltip-validation tooltip-md tooltip-bottom-left">
+                      <input type="text" placeholder="Nombre" id="nombreInput" required [(ngModel)]="modelo.nombre" name="nombre" #nombre="ngModel"
+                          size="35">
+                      <span class="tooltip-content">Este campo es obligatorio!</span>
+                  </label>
+              </div>
+              <div class="form-group">
+                  <label>Apellido Paterno</label>
+                  <input type="text" placeholder="Apellido Paterno" [(ngModel)]="modelo.paterno" name="paterno" size="35">
+              </div>
+              <div class="form-group">
+                  <label>Apellido Materno</label>
+                  <input type="text" placeholder="Apellido Materno" [(ngModel)]="modelo.materno" name="materno" size="35">
+              </div>
+
+
+              <clr-alert *ngIf="errorFlag" [clrAlertType]="'alert-danger'">
+                  <div class="alert-item">
+                      {{estatus.mensaje}}
+                  </div>
+              </clr-alert>
+
+              <div class="form-group">
+
+                  <label for="mi-clave">Clave del libro</label>
+
+                  <input id="mi-clavelibro" [(ngModel)]="miClaveLibro" name="miClaveLibro"  placeholder="Clave del libro" size="35">
+
+              </div>
+
+
+
+
+
+          </section>
+
+      </form>
+  </clr-wizard-page>
+
+
+
+  <clr-wizard-page [clrWizardPageNextDisabled]="miEmail.pristine || miPas.pristine || !myFormEmail.valid || !myFormContrasena.valid"
+      clrWizardPagePreventDefault="true" (clrWizardPageOnCommit)="onCommitEmail()" (clrWizardPagePrevious)="regresar()" (clrWizardPageOnCancel)="doCancelContrasena()">
+      <ng-template clrPageTitle>Autenticación</ng-template>
+      <div class="spinner" *ngIf="cargandoFlagContrasena">
+          Loading...
+      </div>
+      <div class="spinner" *ngIf="cargandoFlagEmail">
+          Loading...
+      </div>
+      <div class="spinner" *ngIf="cargandoFlagClave">
+          Loading...
+      </div>
+      <clr-alert [clrAlertType]="'alert-info'" [clrAlertClosable]="false">
+          <div class="alert-item">
+              La contraseña debe contener un mínimo de 8 caracteres y un máximo de 12, debe contener números y letras, y es sensible a
+              las mayúsculas.
+          </div>
+      </clr-alert>
+      <form class="login" #myFormEmail="ngForm" [class.hide]="cargandoFlagEmail" #myFormContrasena="ngForm" [class.hide]="cargandoFlagContrasena">
+          <section class="form-block">
+
+              <div class="form-group">
+
+                  <label for="miCorreoInput" aria-haspopup="true" role="tooltip" [class.invalid]="miEmail.touched && !miEmail.valid" class="tooltip tooltip-validation tooltip-md tooltip-bottom-left">
+                      Correo electrónico</label>
+
+                  <input [(ngModel)]="miCorreo" name="miCorreo" id="validInput2" required type="email" placeholder="Correo electronico" #miEmail="ngModel"
+                      size="35">
+
+              </div>
+              <clr-alert *ngIf="errorFlagEmail" [clrAlertType]="'alert-danger'">
+                  <div class="alert-item">
+                      {{mensajeErrorEmail}}
+                  </div>
+              </clr-alert>
+
+
+              <div class="form-group">
+                  <label>Contraseña</label>
+
+                  <label for="miPasswordInput" aria-haspopup="true" role="tooltip" [class.invalid]="miPas.touched && !miPas.valid" class="tooltip tooltip-validation tooltip-md tooltip-bottom-left">
+                      <input type="password" placeholder="Contraseña" id="miPasInput" required [(ngModel)]="miPassword" name="miPassword" #miPas="ngModel"
+                          size="35">
+                      <span class="tooltip-content">El password es requerido!</span>
+                  </label>
+              </div>
+              <div class="form-group">
+                  <label>Repetir Contraseña</label>
+                  <input type="password" [(ngModel)]="miPassword2" name="miPassword2" placeholder="Introduce nuevamente el password" size="35">
+              </div>
+              <clr-alert *ngIf="errorFlagContrasena" [clrAlertType]="'alert-danger'">
+                  <div class="alert-item">
+                      {{mensajeErrorContrasena}}
+                  </div>
+              </clr-alert>
+
+              <clr-alert *ngIf="errorFlagClave" [clrAlertType]="'alert-danger'">
+                  <div class="alert-item">
+                      {{mensajeErrorClave}}
+                  </div>
+              </clr-alert>
+
+              <div class="form-group">
+
+                  <label for="mi-clave">Clave del profesor</label>
+
+                  <input id="mi-clave" [(ngModel)]="modeloProfesor.clave" name="modeloProfesor.clave" type="text" placeholder="Clave del profesor"
+                      size="35">
+
+              </div>
+
+
+          </section>
+
+      </form>
+  </clr-wizard-page>
+<!-- NUEVA PANTALLA PARA REGISTRO DE ALUMNOS POR GRUPO PĹANETEL TURNO-->
+<clr-wizard-page [clrWizardPageNextDisabled]="!myFormGrupoPlantelTurno.valid"
+      clrWizardPagePreventDefault="true" (clrWizardPageOnCommit)="onCommitGrupoPlantelTurno()" (clrWizardPagePrevious)="regresar()" (clrWizardPageOnCancel)="doCancelContrasena()">
+      <ng-template clrPageTitle>Autenticación</ng-template>
+      <div class="spinner" *ngIf="cargandoFlagGrupoPlantelTurno">
+          Loading...
+      </div>
+      <clr-alert [clrAlertType]="'alert-info'" [clrAlertClosable]="false">
+          <div class="alert-item">
+              Revisa tu correo electrónico  que proporcionaste en el paso anterior, 
+              se te envió una NIP que debes ingresar en el campo de abajo para terminar el registro
+          </div>
+      </clr-alert>
+   
+      <form class="login" #myFormGrupoPlantelTurno="ngForm" [class.hide]="cargandoFlagGrupoPlantelTurno">
+          <section class="form-block">
+
+              <div class="form-group">
+
+                  <label for="miGrupoInput" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-md tooltip-bottom-left">
+                      Grupo</label>
+
+                  <input [(ngModel)]="miGrupo" name="miGrupo" id="validInputMiGrupo" required type="number" placeholder="Grupo" #modelo.grupo="ngModel"
+                      size="35">
+
+              </div>
+             
+              <div class="form-group">
+                  <label for="">Número de plantel</label>
+                  <div class="select">
+                      <select id="selects_plantel" name="miPlantelsillo" [(ngModel)]="miPlantelsillo">
+                          <option *ngFor="let plantel of planteles">{{plantel.numero}}</option>
+
+                      </select>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="">Turno</label>
+                  <div class="select">
+                      <select id="selects_turno" name="miTurno" [(ngModel)]="miTurno">
+                          <option>matutino</option>
+                          <option>vespertino</option>
+                      </select>
+                  </div>
+              </div>
+
+              <clr-alert *ngIf="errorFlagGrupoPlantelTurno" [clrAlertType]="'alert-danger'"  [clrAlertClosable]="false">
+                  <div class="alert-item">
+                      {{mensajeErrorGrupoPlantelTurno}}
+                  </div>
+              </clr-alert>
+
+              <div class="form-group">
+                  <label for="">* NIP</label>
+                  <input type="text" id="miNIP" placeholder="NIP enviado a tu correo" name="miNIP" [(ngModel)]="miNIP"  >
+              </div>
+
+          </section>
+
+      </form>
+  </clr-wizard-page>
+
+
+
+  <clr-wizard-page>
+      <ng-template clrPageTitle>Confirmación</ng-template> 
+      {{estatus.mensaje}}
+      <button class="btn btn-primary"    (click)="soloRegistrar()">Confirmar Registro</button>
+     
+
+
+
+  </clr-wizard-page>
+</clr-wizard>

@@ -4,7 +4,7 @@ import {Examen} from './examen';
 export interface Alumno {
     indice?:number
     nombreCompleto?:string
- clave?:number;
+ clave?:string;
 nombre?:string;
  paterno?:string;
  materno?:string;

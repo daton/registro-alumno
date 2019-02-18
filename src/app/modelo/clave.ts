@@ -1,4 +1,4 @@
 export class Clave {
 
-    constructor(private numero:number){}
+    constructor(private numero:string){}
 }

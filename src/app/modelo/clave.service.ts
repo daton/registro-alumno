@@ -13,7 +13,7 @@ export class ClaveService {
   constructor(private http:Http) { }
 
 
-  getClave(miClave:number):Observable<Estatus>{
+  getClave(miClave:string):Observable<Estatus>{
    return  this.http.get(this.direccionUrl+miClave)
     .map((res:Response)=><Estatus>res.json())
   }
