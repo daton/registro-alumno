@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from "@angular/core";
 import { ClrWizard, Wizard } from "@clr/angular";
 import { Router } from "@angular/router";
 
-import { HttpClient, HttpHeaders } from "@angular/common/http"
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Globales } from "./modelo/globales";
 import { Materia } from "./modelo/materia";
 import { ProfesorService } from "./modelo/profesor.service";
@@ -197,7 +197,7 @@ export class AppComponent {
     console.log("LA CLAVE QUE VE EL FORMILARIO ES " + this.miClaveLibro);
     this.getClave();
     console.log("CLAVE DEL LIBRO DEL ALUMNO " + this.estatus.success);
-    this.estatus.mensaje='';
+    this.estatus.mensaje = "";
   }
 
   // CLAVE DEL LIBRO EXTRAIDA DEL SERVICIO CLAVE
@@ -205,18 +205,18 @@ export class AppComponent {
     this.servicioClave
       .getClave(this.miClaveLibro)
       .subscribe(estatus => (this.estatus = estatus));
-     
   }
   navegarInicioYregistrar() {
     // 15-marzo-2018. Del modelo ajustamos los valores desde el formulario no hagas caso jeje
 
     //this.router.navigate(["/inicio"], { skipLocationChange: true });
+
+
+
     window.location.href = "https://daton.github.io/academia-geer/#/login";
   }
 
-
-  soloRegistrar(){
-
+  soloRegistrar() {
     this.http
       .post<Estatus>(Globales.urlBase + "/alumno", this.modelo, {
         headers: new HttpHeaders().set("Content-Type", "application/json")
@@ -227,7 +227,7 @@ export class AppComponent {
 
     setTimeout(() => {
       console.log(this.estatus.mensaje);
-    }, 1300);
+    }, 1600);
   }
   verPerfil() {
     console.log("hola");
@@ -311,7 +311,7 @@ export class AppComponent {
     // aqui value lo enlazamos a una variable del formulario a validar asincronimcamente
     value.miPassword;
     value2.miPassword2;
-    console.log("PUTOOOOO");
+    console.log("PUaaaaaaaaaa");
 
     //Hacemos el envio asincronico con la informacion anterior
 
@@ -351,7 +351,7 @@ export class AppComponent {
         this.miPlantelsillo != null &&
         this.miTurno != null &&
         this.miNIP != null &&
-        valor!=null
+        valor != null
       ) {
         this.modelo.grupo = this.miGrupo;
         this.modelo.plantel = this.miPlantelsillo;

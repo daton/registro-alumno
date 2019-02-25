@@ -5,7 +5,7 @@
   <clr-wizard-button [type]="'cancel'" (click)="navegarInicio()">Cancelar</clr-wizard-button>
   <clr-wizard-button [type]="'previous'">Atrás</clr-wizard-button>
   <clr-wizard-button [type]="'next'" (click)="obtenerClave()">Siguiente</clr-wizard-button>
-  <clr-wizard-button [type]="'finish'" (click)="navegarInicioYregistrar()">Finalizar</clr-wizard-button>
+  <clr-wizard-button [type]="'finish'" (click)="navegarInicioYregistrar()"> Finalizar</clr-wizard-button>
 
 
 
@@ -17,7 +17,7 @@
       </div>
       <clr-alert [clrAlertType]="'alert-info'" [clrAlertClosable]="false">
           <div class="alert-item">
-              Es importante que tengas a la mano la clave de tu libro
+              Es muy importante que tengas a la mano la clave de tu libro
           </div>
       </clr-alert>
 
@@ -109,14 +109,14 @@
                   <label>Contraseña</label>
 
                   <label for="miPasswordInput" aria-haspopup="true" role="tooltip" [class.invalid]="miPas.touched && !miPas.valid" class="tooltip tooltip-validation tooltip-md tooltip-bottom-left">
-                      <input type="password" placeholder="Contraseña" id="miPasInput" required [(ngModel)]="miPassword" name="miPassword" #miPas="ngModel"
+                      <input type="text" placeholder="Contraseña" id="miPasInput" required [(ngModel)]="miPassword" name="miPassword" #miPas="ngModel"
                           size="35">
                       <span class="tooltip-content">El password es requerido!</span>
                   </label>
               </div>
               <div class="form-group">
                   <label>Repetir Contraseña</label>
-                  <input type="password" [(ngModel)]="miPassword2" name="miPassword2" placeholder="Introduce nuevamente el password" size="35">
+                  <input type="text" [(ngModel)]="miPassword2" name="miPassword2" placeholder="Introduce nuevamente el password" size="35">
               </div>
               <clr-alert *ngIf="errorFlagContrasena" [clrAlertType]="'alert-danger'">
                   <div class="alert-item">
@@ -212,7 +212,7 @@
   <clr-wizard-page>
       <ng-template clrPageTitle>Confirmación</ng-template> 
       {{estatus.mensaje}}
-      <button class="btn btn-primary"    (click)="soloRegistrar()">Confirmar Registro</button>
+    <button class="btn btn-primary"    (click)="soloRegistrar()">Confirmar registro</button> 
      
 
 
